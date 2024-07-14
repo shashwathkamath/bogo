@@ -1,76 +1,66 @@
-"use client"
-import axios from 'axios';
-import { useState } from 'react';
-
-interface Restaurant {
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
-    email: string;
-    phone: string;
-    offerDetails: string;
-}
+import { FormData } from '@/app/types/types';
+import React, { useState } from 'react';
 
 const RestaurantForm: React.FC = () => {
-    const [restaurant, setRestaurant] = useState<Restaurant>({
-        name: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        email: '',
-        phone: '',
-        offerDetails: '',
+    const [formData, setFormData] = useState<FormData>({
+        restaurantName: '',
+        offerDescription: '',
+        validUntil: '',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setRestaurant((prev) => ({ ...prev, [name]: value }));
+        setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('/api/restaurants', restaurant);
-            console.log('Restaurant registered:', response.data);
-        } catch (error) {
-            console.error('Error registering restaurant:', error);
-        }
+        // Here you would typically send this data to your backend
+        console.log('Form submitted:', formData);
+        // Reset form after submission
+        setFormData({ restaurantName: '', offerDescription: '', validUntil: '' });
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 border rounded shadow">
-            <h2 className="text-2xl mb-4">Register Your Restaurant</h2>
-            {Object.keys(restaurant).map((key) => (
-                <div key={key} className="mb-4">
-                    <label htmlFor={key} className="block text-sm font-medium text-gray-700">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </label>
-                    {key === 'offerDetails' ? (
-                        <textarea
-                            id={key}
-                            name={key}
-                            value={(restaurant as any)[key]}
-                            onChange={handleChange}
-                            className="mt-1 p-2 block w-full border rounded"
-                            rows={4}
-                        />
-                    ) : (
-                        <input
-                            id={key}
-                            name={key}
-                            type="text"
-                            value={(restaurant as any)[key]}
-                            onChange={handleChange}
-                            className="mt-1 p-2 block w-full border rounded"
-                        />
-                    )}
-                </div>
-            ))}
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-                Register
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="text-2xl font-bold">Submit a BOGO Offer</h2>
+            <div>
+                <label htmlFor="restaurantName" className="block">Restaurant Name</label>
+                <input
+                    type="text"
+                    id="restaurantName"
+                    name="restaurantName"
+                    value={formData.restaurantName}
+                    onChange={handleChange}
+                    required
+                    className="w-full border rounded px-3 py-2"
+                />
+            </div>
+            <div>
+                <label htmlFor="offerDescription" className="block">Offer Description</label>
+                <textarea
+                    id="offerDescription"
+                    name="offerDescription"
+                    value={formData.offerDescription}
+                    onChange={handleChange}
+                    required
+                    className="w-full border rounded px-3 py-2"
+                ></textarea>
+            </div>
+            <div>
+                <label htmlFor="validUntil" className="block">Valid Until</label>
+                <input
+                    type="date"
+                    id="validUntil"
+                    name="validUntil"
+                    value={formData.validUntil}
+                    onChange={handleChange}
+                    required
+                    className="w-full border rounded px-3 py-2"
+                />
+            </div>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                Submit Offer
             </button>
         </form>
     );

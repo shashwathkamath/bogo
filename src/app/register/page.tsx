@@ -1,19 +1,13 @@
-import Head from 'next/head';
-import RestaurantForm from '../components/RestaurantForm';
 
-const Register = () => {
+import RestaurantForm from '@/app/components/RestaurantForm';
+import React from 'react';
+
+const RestaurantFormPage: React.FC = () => {
     return (
-        <div>
-            <Head>
-                <title>Register Restaurant</title>
-                <meta name="description" content="Register your restaurant for BOGO offers" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className="p-4">
-                <RestaurantForm />
-            </main>
+        <div className="container mx-auto px-4 py-8">
+            <RestaurantForm />
         </div>
     );
 };
 
-export default Register;
+export default RestaurantFormPage;
